@@ -9,10 +9,6 @@ client.on('ready', () => {
 
 client.on('message', async (message) => {
     if (message.author.bot) return
-})
-
-client.on('message', async (message) => {
-    if (message.author.bot) return
 
     if (message.content === 'ping') {
         const startMsg = await checkStatus()
