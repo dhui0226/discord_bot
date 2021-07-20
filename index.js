@@ -15,10 +15,14 @@ client.on('message', async (message) => {
         console.log('start', startMsg)
         message.channel.send(startMsg.data.gecko_says)
     } else if (message.content === 'coins') {
-        //need to map coin IDs
+        message.channel.send('Here is a list of 10 coins you might be interested in.')
         const coins = await getCoins()
-        console.log('test', coins[0].id)
-        message.channel.send(coins[0].id)
+        
+        coins.map((coin) => {
+            if (coin.market_data.market_cap_rank <= 10) {
+                message.channel.send(coin.id)
+            }
+        })
     } else {
         const coin = await getCoin(message.content)
         const name = coin.id 
