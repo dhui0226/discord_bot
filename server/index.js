@@ -14,7 +14,7 @@ const getCoins = async() => {
 }
 
 const getCoin = async(coinId) => {
-    console.log('fetch', coinId)
+    console.log('single coin', coinId)
     const { data } = await CoinGeckoClient.coins.fetch(coinId, {})
 
     return data
