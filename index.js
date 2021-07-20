@@ -8,16 +8,23 @@ client.on('ready', () => {
 })
 
 client.on('message', async (message) => {
+    if (message.author.bot) return
+})
+
+client.on('message', async (message) => {
+    if (message.author.bot) return
+
     if (message.content === 'ping') {
         const startMsg = await checkStatus()
         console.log('start', startMsg)
         message.channel.send(startMsg.data.gecko_says)
     } else if (message.content === 'coins') {
+        //need to map coin IDs
         const coins = await getCoins()
-        console.log('test', coins.id)
-        message.channel.send(coins.id)
-    } else if (message.content === 'cardano') {
-        const coin = await getCoin()
+        console.log('test', coins[0].id)
+        message.channel.send(coins[0].id)
+    } else {
+        const coin = await getCoin(message.content)
         const name = coin.id 
         const price = coin.market_data.current_price.usd
         

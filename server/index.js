@@ -13,8 +13,9 @@ const getCoins = async() => {
     return data
 }
 
-const getCoin = async() => {
-    const { data } = await CoinGeckoClient.coins.fetch('cardano', {})
+const getCoin = async(coinId) => {
+    console.log('fetch', coinId)
+    const { data } = await CoinGeckoClient.coins.fetch(coinId, {})
 
     return data
 }
