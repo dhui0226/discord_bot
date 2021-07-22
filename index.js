@@ -12,18 +12,15 @@ client.on('guildMemberAdd', async member => {
 
     if (!channel) return
 
-    channel.send(`Welcome to ${message.guild.name}, ${member}! 
-        To look up the price of a cryptocurrency, just type !anyCoinName. 
-        For example, !bitcoin. Here is a list of 10 coins you might be interested in.`)
+    channel.send(`Welcome to ${member.guild.name}, ${member}!\n To look up the price of a cryptocurrency, just type !anyCoinName. For example, !bitcoin.\n Here is a list of 10 coins you might be interested in.`)
 
     const coins = await getCoins()
         
     coins.map((coin) => {
         if (coin.market_data.market_cap_rank <= 10) {
-            message.channel.send(coin.id)
+            channel.send(coin.id)
         }
     })
-    client.emit("guildMemberAdd", member)
 })
 
 client.on('message', async (message) => {
@@ -32,15 +29,8 @@ client.on('message', async (message) => {
     if (message.content.startsWith(`${process.env.PREFIX}ping`)) {
         const startMsg = await checkStatus()
         message.channel.send(startMsg.data.gecko_says)
-    } else if (message.content.startsWith(`${process.env.PREFIX}coins`)) {
-        message.channel.send('Here is a list of 10 coins you might be interested in.')
-        const coins = await getCoins()
-        
-        coins.map((coin) => {
-            if (coin.market_data.market_cap_rank <= 10) {
-                message.channel.send(coin.id)
-            }
-        })
+
+        client.emit('guildMemberAdd', message.member)
     } else if (message.content.startsWith(`${process.env.PREFIX}`)) {
         const queriedCoin = message.content.slice(1)
 
