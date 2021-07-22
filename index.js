@@ -2,6 +2,7 @@ require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const { checkStatus, getCoins, getCoin } = require('./server')
+const PREFIX = '!'
 
 client.once('ready', () => {
     console.log(`logged in as ${client.user.tag}`)
@@ -24,14 +25,14 @@ client.on('guildMemberAdd', async member => {
 })
 
 client.on('message', async (message) => {
-    if (!message.content.startsWith(process.env.PREFIX) || message.author.bot) return
+    if (!message.content.startsWith(PREFIX) || message.author.bot) return
 
-    if (message.content.startsWith(`${process.env.PREFIX}ping`)) {
+    if (message.content.startsWith(`${PREFIX}ping`)) {
         const startMsg = await checkStatus()
         message.channel.send(startMsg.data.gecko_says)
 
         client.emit('guildMemberAdd', message.member)
-    } else if (message.content.startsWith(`${process.env.PREFIX}`)) {
+    } else if (message.content.startsWith(`${PREFIX}`)) {
         const queriedCoin = message.content.slice(1)
 
         try {
