@@ -1,12 +1,16 @@
 require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
+const { client: post } = require('./server/db')
 const { checkStatus, getCoins, getCoin } = require('./server')
+const { getCoinByName } = require('./server/db')
 const PREFIX = '!'
 
 client.once('ready', () => {
     console.log(`logged in as ${client.user.tag}`)
 })
+
+post.connect()
 
 client.on('guildMemberAdd', async member => {
     const channel = member.guild.channels.cache.find(ch => ch.name === 'general')
@@ -32,6 +36,19 @@ client.on('message', async (message) => {
         message.channel.send(startMsg.data.gecko_says)
 
         client.emit('guildMemberAdd', message.member)
+    } else if (message.content.startsWith(`${PREFIX}add`)) {
+        const args = message.content.slice(PREFIX.length).trim().split(' ')
+        const coinToAdd = args[1]
+
+        const listedCoin = await getCoinByName(coinToAdd)
+       
+        if (listedCoin.name) {
+            message.channel.send('coin is already added to list')
+        } else {
+            //query coingecko to see if coin exists
+            //if exist then add to db
+        }
+        
     } else if (message.content.startsWith(`${PREFIX}`)) {
         const queriedCoin = message.content.slice(1)
 

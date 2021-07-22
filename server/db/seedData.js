@@ -1,9 +1,10 @@
 const { client } = require('./client')
+const { addCoin } = require('./coins')
 
 async function dropTable() {
     try {
         client.query(`
-            DROP TABLE coins IF EXISTS;
+            DROP TABLE IF EXISTS coins;
         `)
     } catch (error) {
         console.error('could not drop table')
@@ -23,17 +24,6 @@ async function createTable() {
     }
 }
 
-async function addCoin({ coinName }) {
-    try {
-        await client.query(`
-            INSERT INTO coins(name)
-            VALUES ($1);
-        `, [coinName])
-    } catch (error) {
-        console.error('could not add coin')
-    }
-}
-
 async function createInitialCoins() {
     try {
         const coinsToAdd = [
@@ -42,7 +32,9 @@ async function createInitialCoins() {
             {coinName: 'cardano'}
         ]
     
-        const coins = Promise.all(coinsToAdd.map(addCoin))
+        const coins = await Promise.all(coinsToAdd.map(addCoin))
+
+        console.log(coins)
     } catch (error) {
         console.error('could not create initial coins')
     }
