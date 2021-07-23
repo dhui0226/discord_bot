@@ -1,7 +1,8 @@
 const { client } = require('./client')
-const { getCoinByName } = require('./coins')
+const { getCoinByName, addCoin } = require('./coins')
 
 module.exports = {
     client,
-    getCoinByName
+    getCoinByName,
+    addCoin
 }

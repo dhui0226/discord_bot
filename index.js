@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 const { client: post } = require('./server/db')
 const { checkStatus, getCoins, getCoin } = require('./server')
-const { getCoinByName } = require('./server/db')
+const { getCoinByName, addCoin } = require('./server/db')
 const PREFIX = '!'
 
 client.once('ready', () => {
@@ -40,15 +40,27 @@ client.on('message', async (message) => {
         const args = message.content.slice(PREFIX.length).trim().split(' ')
         const coinToAdd = args[1]
 
-        const listedCoin = await getCoinByName(coinToAdd)
+        try {
+            const listedCoin = await getCoinByName(coinToAdd)
        
-        if (listedCoin.name) {
-            message.channel.send('coin is already added to list')
-        } else {
+            if (listedCoin) {
             //query coingecko to see if coin exists
             //if exist then add to db
+                message.channel.send('coin is already added to list')
+            } else {
+                const coin = await getCoin(coinToAdd.toLowerCase())
+
+                console.log('listcoin', coin.id) //coin.id
+
+                if (coin.id) {
+                    //add to db
+                    await addCoin({ coinName: coin.id })
+                    message.channel.send(`${coin.id} has been added to the list`)
+                }
+            }
+        } catch(error) {
+            console.error('something went wrong')
         }
-        
     } else if (message.content.startsWith(`${PREFIX}`)) {
         const queriedCoin = message.content.slice(1)
 
