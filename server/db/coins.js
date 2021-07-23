@@ -22,14 +22,27 @@ async function getCoinByName(name) {
             WHERE name = '${name}';
         `)
 
-        console.log('getCoinByName', coin)
         return coin
     } catch (error) {
         console.error('could not get coin by name')
     }
 }
 
+async function getCoinList() {
+    try {
+        const { rows } = await client.query(`
+            SELECT *
+            FROM coins;
+        `)
+
+        return rows
+    } catch (error) {
+        console.error('could not get list')
+    }
+}
+
 module.exports = {
+    addCoin,
     getCoinByName,
-    addCoin
+    getCoinList
 }
