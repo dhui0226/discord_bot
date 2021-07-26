@@ -3,7 +3,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 const { client: post } = require('./server/db')
 const { checkStatus, getCoins, getCoin } = require('./server')
-const { addCoin, getCoinByName, getCoinList } = require('./server/db')
+const { addCoin, removeCoin, getCoinByName, getCoinList } = require('./server/db')
 const PREFIX = '!'
 
 client.once('ready', () => {
@@ -31,21 +31,16 @@ client.on('guildMemberAdd', async member => {
 client.on('message', async (message) => {
     if (!message.content.startsWith(PREFIX) || message.author.bot) return
 
-    if (message.content.startsWith(`${PREFIX}ping`)) {
+    const args = message.content.slice(PREFIX.length).trim().split(' ')
+    const command = args[0].toLowerCase()
+
+    if (command === 'ping') {
         const startMsg = await checkStatus()
         message.channel.send(startMsg.data.gecko_says)
 
-        const list = await getCoinList()
-       
-        message.channel.send(`Here are the coins currently on your watchlist.`)
-        list.map((coin) => {
-            message.channel.send(coin.name)
-        })
-
-        //client.emit('guildMemberAdd', message.member)
-    } else if (message.content.startsWith(`${PREFIX}add`)) {
-        const args = message.content.slice(PREFIX.length).trim().split(' ')
-        const coinToAdd = args[1]
+        client.emit('guildMemberAdd', message.member)
+    } else if (command === 'add') {
+        const coinToAdd = args[1].toLowerCase()
 
         try {
             const listedCoin = await getCoinByName(coinToAdd)
@@ -53,7 +48,7 @@ client.on('message', async (message) => {
             if (listedCoin) {
                 message.channel.send('coin is already added to list')
             } else {
-                const coin = await getCoin(coinToAdd.toLowerCase())
+                const coin = await getCoin(coinToAdd)
 
                 if (coin.id) {
                     await addCoin({ coinName: coin.id })
@@ -63,11 +58,33 @@ client.on('message', async (message) => {
         } catch(error) {
             console.error('something went wrong')
         }
-    } else if (message.content.startsWith(`${PREFIX}`)) {
-        const queriedCoin = message.content.slice(1)
+    } else if (command === 'remove') {
+        const coinToRemove = args[1].toLowerCase()
 
         try {
-            const coin = await getCoin(queriedCoin.toLowerCase())
+            const listedCoin = await getCoinByName(coinToRemove)
+
+            if (listedCoin) {
+                await removeCoin({coinName: coinToRemove})
+                message.channel.send(`${coinToRemove} has been removed from the list`)
+            } else {
+                message.channel.send('coin does not exist on the watchlist')
+            }
+        } catch (error) {
+            console.error('could not remove coin from the watchlist')
+        }
+    } else if (command === 'watchlist') {
+        const list = await getCoinList()
+
+        message.channel.send(`Here are the coins currently on your watchlist.`)
+        list.map((coin) => {
+            message.channel.send(coin.name)
+        })
+    } else {
+        const queriedCoin = command
+
+        try {
+            const coin = await getCoin(queriedCoin)
             const name = coin.id 
             const price = coin.market_data.current_price.usd
         

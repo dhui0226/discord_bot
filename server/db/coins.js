@@ -14,6 +14,20 @@ async function addCoin({ coinName }) {
     }
 }
 
+async function removeCoin({ coinName }) {
+    try {
+        const { rows: [ coin ] } = await client.query(`
+            DELETE FROM coins
+            WHERE name = '${coinName}'
+            RETURNING *;
+        `)
+
+        return coin
+    } catch (error) {
+        console.error('could not remove coin')
+    }
+}
+
 async function getCoinByName(name) {
     try {
         const { rows: [ coin ] } = await client.query(`
@@ -43,6 +57,7 @@ async function getCoinList() {
 
 module.exports = {
     addCoin,
+    removeCoin,
     getCoinByName,
     getCoinList
 }
