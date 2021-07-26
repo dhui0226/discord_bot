@@ -73,12 +73,35 @@ client.on('message', async (message) => {
         } catch (error) {
             console.error('could not remove coin from the watchlist')
         }
-    } else if (command === 'watchlist') {
+    } else if (command === 'list') {
         const list = await getCoinList()
 
         message.channel.send(`Here are the coins currently on your watchlist.`)
         list.map((coin) => {
             message.channel.send(coin.name)
+        })
+    } else if (command === 'watchlist') {
+        const objectList = await getCoinList()
+
+        const coinNames = objectList.map((ele) => {
+            return ele.name
+        })
+
+        try {
+            const coins = await Promise.all(coinNames.map(getCoin))
+
+            coins.map((coin) => {
+                message.channel.send(`${coin.id}: ${coin.market_data.current_price.usd}`)
+            })
+        } catch (error) {
+            message.channel.send('could not display watchlist')
+        }
+    } else if (command === 'marketlist') {
+        message.channel.send('Here are the first 50 coins by market rank.')
+        const coins = await getCoins()
+
+        coins.map((coin) => {
+            message.channel.send(`${coin.market_data.market_cap_rank}: ${coin.id}`)
         })
     } else {
         const queriedCoin = command
