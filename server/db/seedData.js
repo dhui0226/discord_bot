@@ -42,11 +42,8 @@ async function createTable() {
 
 async function rebuildDB() {
     try {
-        console.log('connecting to client')
         client.connect()
-        console.log('dropping tables')
         await dropTable()
-        console.log('creating tables')
         await createTable()
         //await createInitialCoins()
     } catch (error) {
