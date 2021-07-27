@@ -56,38 +56,6 @@ client.on('message', async (message) => {
 		message.reply('there was an error trying to execute that command!');
 	} 
 
-    /*if (command === 'ping') {
-        const startMsg = await checkStatus()
-        message.channel.send(startMsg.data.gecko_says)
-
-        client.emit('guildMemberAdd', message.member)
-    } else if (command === 'list') {
-        const list = await getCoinList()
-
-        message.channel.send(`Here are the coins currently on your watchlist.`)
-        list.map((coin) => {
-            message.channel.send(coin.name)
-        })
-    } else if (command === 'marketlist') {
-        message.channel.send('Here are the first 50 coins by market rank.')
-        const coins = await getCoins()
-
-        coins.map((coin) => {
-            message.channel.send(`${coin.market_data.market_cap_rank}: ${coin.id}`)
-        })
-    } else {
-        const queriedCoin = command
-
-        try {
-            const coin = await getCoin(queriedCoin)
-            const name = coin.id 
-            const price = coin.market_data.current_price.usd
-        
-            message.channel.send(`${name}: ${price}`)
-        } catch (error) {
-            message.channel.send('could not find this coin')
-        }
-    } */
 })
 
 client.login(process.env.TOKEN)
