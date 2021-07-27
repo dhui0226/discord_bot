@@ -7,6 +7,8 @@ const { getCoinList } = require('./server/db')
 const { watchlistUpdate } = require('./commands/watchlist')
 const PREFIX = '!'
 
+post.connect()
+
 const fs = require('fs')
 client.commands = new Discord.Collection()
 
@@ -39,8 +41,6 @@ client.once('ready', () => {
         }
     }, 3600000)
 })
-
-post.connect()
 
 client.on('guildMemberAdd', async member => {
     const channel = member.guild.channels.cache.find(ch => ch.name === 'general')
