@@ -13,7 +13,6 @@ module.exports = {
 
         try {
             const coins = await Promise.all(coinNames.map(getCoin))
-
             coins.map((coin) => {
                 message.channel.send(`${coin.id}: ${coin.market_data.current_price.usd}`)
             })

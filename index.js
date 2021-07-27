@@ -2,7 +2,9 @@ require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const { client: post } = require('./server/db')
-const { getCoins } = require('./server')
+const { getCoin, getCoins } = require('./server')
+const { getCoinList } = require('./server/db')
+const { watchlistUpdate } = require('./commands/watchlist')
 const PREFIX = '!'
 
 const fs = require('fs')
@@ -17,6 +19,25 @@ for (const file of commandFiles) {
 
 client.once('ready', () => {
     console.log(`logged in as ${client.user.tag}`)
+
+    setInterval( async () => {
+        const channel = client.channels.cache.find(ch => ch.name === 'general')
+        channel.send('Here is your hourly update')
+
+        const objectList = await getCoinList()
+        const coinNames = objectList.map((ele) => {
+            return ele.name
+        })
+
+        try {
+            const coins = await Promise.all(coinNames.map(getCoin))
+            coins.map((coin) => {
+                channel.send(`${coin.id}: ${coin.market_data.current_price.usd}`)
+            })
+        } catch (error) {
+            channel.send('could not display watchlist')
+        }
+    }, 3600000)
 })
 
 post.connect()
