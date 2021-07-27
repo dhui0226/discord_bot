@@ -4,7 +4,6 @@ const client = new Discord.Client()
 const { client: post } = require('./server/db')
 const { getCoin, getCoins } = require('./server')
 const { getCoinList } = require('./server/db')
-const { watchlistUpdate } = require('./commands/watchlist')
 const PREFIX = '!'
 
 post.connect()
