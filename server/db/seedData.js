@@ -24,21 +24,21 @@ async function createTable() {
     }
 }
 
-async function createInitialCoins() {
-    try {
-        const coinsToAdd = [
-            {coinName: 'bitcoin'},
-            {coinName: 'ethereum'},
-            {coinName: 'cardano'}
-        ]
-    
-        const coins = await Promise.all(coinsToAdd.map(addCoin))
-
-        console.log(coins)
-    } catch (error) {
-        console.error('could not create initial coins')
-    }
-}
+//async function createInitialCoins() {
+//    try {
+//        const coinsToAdd = [
+//            {coinName: 'bitcoin'},
+//            {coinName: 'ethereum'},
+//            {coinName: 'cardano'}
+//        ]
+//    
+//        const coins = await Promise.all(coinsToAdd.map(addCoin))
+//
+//        console.log(coins)
+//    } catch (error) {
+//        console.error('could not create initial coins')
+//    }
+//}
 
 async function rebuildDB() {
     try {
