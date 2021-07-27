@@ -2,9 +2,7 @@ require('dotenv').config()
 const Discord = require('discord.js')
 const client = new Discord.Client()
 const { client: post } = require('./server/db')
-const { checkStatus, getCoins, getCoin } = require('./server')
-const { addCoin, removeCoin, getCoinByName, getCoinList } = require('./server/db')
-//const { addCommand } = require('./commands')
+const { getCoins } = require('./server')
 const PREFIX = '!'
 
 const fs = require('fs')
@@ -14,8 +12,6 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
-	// set a new item in the Collection
-	// with the key as the command name and the value as the exported module
 	client.commands.set(command.name, command);
 }
 
@@ -30,7 +26,7 @@ client.on('guildMemberAdd', async member => {
 
     if (!channel) return
 
-    channel.send(`Welcome to ${member.guild.name}, ${member}!\n To look up the price of a cryptocurrency, just type !anyCoinName. For example, !bitcoin.\n Here is a list of 10 coins you might be interested in.`)
+    channel.send(`Welcome to ${member.guild.name}, ${member}!\n To look up the price of a cryptocurrency, just type !anyCoinName. For example, !bitcoin.\n For a list of tasks I'm able to perform, type !commands\n Here is a list of 10 coins you might be interested in.`)
 
     const coins = await getCoins()
         
