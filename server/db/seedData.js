@@ -5,7 +5,7 @@ async function dropTable() {
     try {
         console.log('dropping table...')
 
-        client.query(`
+        await client.query(`
             DROP TABLE IF EXISTS coins;
         `)
 
@@ -19,7 +19,7 @@ async function createTable() {
     try {
         console.log('creating table...')
 
-        client.query(`
+        await client.query(`
             CREATE TABLE coins (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) UNIQUE NOT NULL
