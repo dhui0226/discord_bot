@@ -3,9 +3,13 @@ const { addCoin } = require('./coins')
 
 async function dropTable() {
     try {
+        console.log('dropping table...')
+
         client.query(`
             DROP TABLE IF EXISTS coins;
         `)
+
+        console.log('done dropping table')
     } catch (error) {
         console.error('could not drop table')
     }
@@ -13,12 +17,16 @@ async function dropTable() {
 
 async function createTable() {
     try {
+        console.log('creating table...')
+
         client.query(`
             CREATE TABLE coins (
                 id SERIAL PRIMARY KEY,
                 name VARCHAR(255) UNIQUE NOT NULL
             );
         `)
+
+        console.log('done creating table')
     } catch (error) {
         console.error('could not create table')
     }
