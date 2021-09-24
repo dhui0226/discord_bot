@@ -7,7 +7,8 @@ A bot for getting live updates of cryptocurrencies while interacting with friend
 Create a discord account.  
 Follow the [documentation](https://discordjs.guide/preparations/setting-up-a-bot-application.html#creating-your-bot) to set up your bot and invite it to your desired server.  
 Create a ``` .env ``` file at the root of the project and create the variable ``` TOKEN = '[YOUR_BOT_TOKEN]' ```  
-Install dependencies with ``` npm install ```  
+Install dependencies with ``` npm install ```
+Seed the database with ``` npm run seed ```  
 Start up the bot with ``` npm start ```
 
 ## Discord Commands
